@@ -16,40 +16,53 @@
 
 package com.support.android.designlibdemo;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-
-import java.util.Random;
 
 public class CheeseDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_NAME = "cheese_name";
 
+    private String cheeseName;
+
+    private CoordinatorLayout coordinatorLayout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        cheeseName = getIntent().getStringExtra(EXTRA_NAME);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
+        setupToolbar();
+        loadBackdrop();
+        setupFab();
+    }
 
-        Intent intent = getIntent();
-        final String cheeseName = intent.getStringExtra(EXTRA_NAME);
-
+    private void setupToolbar() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(cheeseName);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
-        CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(cheeseName);
+    private void setupFab() {
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(coordinatorLayout, cheeseName, Snackbar.LENGTH_SHORT).show();
+            }
+        });
 
-        loadBackdrop();
     }
 
     private void loadBackdrop() {
